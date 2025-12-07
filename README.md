@@ -10,9 +10,9 @@ How to include the API with Maven:
 </repositories>
 <dependencies>
     <dependency>
-        <groupId>com.github.MilkBowl</groupId>
+        <groupId>com.github.federkone</groupId>
         <artifactId>VaultAPI</artifactId>
-        <version>2.0</version>
+        <version>2.0.0</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
@@ -24,11 +24,9 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    compileOnly "com.github.MilkBowl:VaultAPI:1.7"
+    compileOnly "com.github.federkone:VaultAPI:2.0.0"
 }
 ```
-
-**Note**: The VaultAPI version has 2 numbers (major.minor), unlike Vault, which has 3. The 2 numbers in the VaultAPI will always correspond to the 2 beginning numbers in a Vault version to make it clear what versions your plugin will for sure work with.
 
 ## Why Vault?
 I have no preference which library suits your plugin and development efforts
@@ -69,6 +67,7 @@ package com.example.plugin;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyMultiCurrency;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.permission.Permission;
 
@@ -79,8 +78,8 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
-    
-    private static Economy econ = null;
+    private static EconomyMultiCurrency economyMultiCurrency = null;
+    private static Economy economy = null;
     private static Permission perms = null;
     private static Chat chat = null;
 
@@ -91,60 +90,65 @@ public class ExamplePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (!setupEconomy() ) {
-            getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
+        setupEconomy();
         setupPermissions();
         setupChat();
     }
-    
-    private boolean setupEconomy() {
+
+    private setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
         }
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
+        RegisteredServiceProvider<Economy> providerVault_v_1_7_3 = getServer().getServicesManager().getRegistration(Economy.class); //Vault v1.7.3 and earlier
+        RegisteredServiceProvider<EconomyMultiCurrency> providerVault_v_2_0_0 = getServer().getServicesManager().getRegistration(EconomyMultiCurrency.class); //EconomyMultiCurrency extends Economy
+        if (providerVault_v_1_7_3 != null) {
+            economy = providerVault_v_1_7_3.getProvider();
         }
-        econ = rsp.getProvider();
-        return econ != null;
+        if (providerVault_v_2_0_0 != null) {
+            economyMultiCurrency = providerVault_v_2_0_0.getProvider();
+        }
+        
+        //If you want, you can only capture EconomyMulticurrency since it extends Economy
+        //Example:
+            if (economyMultiCurrency != null) {
+                economy = economyMultiCurrency; //EconomyMultiCurrency unboxing to Economy
+            }
+        // This feature will allow us to inject economyMultiCurrency into existing systems that consume Economy.class
     }
-    
+
     private boolean setupChat() {
         RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
         chat = rsp.getProvider();
         return chat != null;
     }
-    
+
     private boolean setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
         perms = rsp.getProvider();
         return perms != null;
     }
-    
+
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
-        if(!(sender instanceof Player)) {
+        if (!(sender instanceof Player)) {
             getLogger().info("Only players are supported for this Example Plugin, but you should not do this!!!");
             return true;
         }
-        
+
         Player player = (Player) sender;
-        
-        if(command.getLabel().equals("test-economy")) {
+
+        if (command.getLabel().equals("test-economy")) {
             // Lets give the player 1.05 currency (note that SOME economic plugins require rounding!)
             sender.sendMessage(String.format("You have %s", econ.format(econ.getBalance(player.getName()))));
             EconomyResponse r = econ.depositPlayer(player, 1.05);
-            if(r.transactionSuccess()) {
+            if (r.transactionSuccess()) {
                 sender.sendMessage(String.format("You were given %s and now have %s", econ.format(r.amount), econ.format(r.balance)));
             } else {
                 sender.sendMessage(String.format("An error occured: %s", r.errorMessage));
             }
             return true;
-        } else if(command.getLabel().equals("test-permission")) {
+        } else if (command.getLabel().equals("test-permission")) {
             // Lets test if user has the node "example.plugin.awesome" to determine if they are awesome or just suck
-            if(perms.has(player, "example.plugin.awesome")) {
+            if (perms.has(player, "example.plugin.awesome")) {
                 sender.sendMessage("You are awesome!");
             } else {
                 sender.sendMessage("You suck!");
@@ -154,15 +158,15 @@ public class ExamplePlugin extends JavaPlugin {
             return false;
         }
     }
-    
+
     public static Economy getEconomy() {
         return econ;
     }
-    
+
     public static Permission getPermissions() {
         return perms;
     }
-    
+
     public static Chat getChat() {
         return chat;
     }
