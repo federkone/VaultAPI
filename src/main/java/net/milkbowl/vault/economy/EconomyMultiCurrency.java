@@ -2,7 +2,17 @@ package net.milkbowl.vault.economy;
 
 import org.bukkit.OfflinePlayer;
 
+import java.util.List;
+
 public interface EconomyMultiCurrency extends Economy{
+
+
+    /**
+     * Returns a list of all available currencies in the economy plugin.
+     * Can be empty.
+     * @return List of currency names
+     */
+    public List<String> getCurrencies();
 
     /**
      * Some economy plugins round off after a certain number of digits.
