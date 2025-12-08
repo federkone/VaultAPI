@@ -24,7 +24,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    compileOnly "com.github.federkone:VaultAPI:2.0.0"
+    compileOnly "com.github.federkone:VaultAPI:master-SNAPSHOT"
 }
 ```
 
