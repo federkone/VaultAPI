@@ -28,37 +28,6 @@ dependencies {
 }
 ```
 
-## Why Vault?
-I have no preference which library suits your plugin and development efforts
-best.  Really, I thought a central suite (rather...Vault) of solutions was the
-the proper avenue than focusing on a single category of plugin.  That's where
-the idea for Vault came into play.
-
-So, what features do I _think_ you'll like the most?
-
- * No need to include my source code in your plugin
- * Broad range of supported plugins
- * Choice!
-
-## License
-Copyright (C) 2011-2018 Morgan Humes <morgan@lanaddict.com>
-
-Vault is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Vault is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with Vault.  If not, see <http://www.gnu.org/licenses/>.
-
-## Building
-VaultAPI comes with all libraries needed to build from the current branch.
-
 ## Implementing Vault
 Implementing Vault is quite simple. It requires getting the Economy, Permission, or Chat service from the Bukkit ServiceManager. See the example below:
 
@@ -172,3 +141,35 @@ public class ExamplePlugin extends JavaPlugin {
     }
 }
 ```
+
+
+## Why Vault?
+I have no preference which library suits your plugin and development efforts
+best.  Really, I thought a central suite (rather...Vault) of solutions was the
+the proper avenue than focusing on a single category of plugin.  That's where
+the idea for Vault came into play.
+
+So, what features do I _think_ you'll like the most?
+
+ * No need to include my source code in your plugin
+ * Broad range of supported plugins
+ * Choice!
+
+## License
+Copyright (C) 2011-2018 Morgan Humes <morgan@lanaddict.com>
+
+Vault is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Vault is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with Vault.  If not, see <http://www.gnu.org/licenses/>.
+
+## Building
+VaultAPI comes with all libraries needed to build from the current branch.
