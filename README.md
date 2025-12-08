@@ -12,7 +12,7 @@ How to include the API with Maven:
     <dependency>
         <groupId>com.github.federkone</groupId>
         <artifactId>VaultAPI</artifactId>
-        <version>2.0.0</version>
+        <version>master-SNAPSHOT</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
@@ -113,7 +113,7 @@ public class ExamplePlugin extends JavaPlugin {
             if (economyMultiCurrency != null) {
                 economy = economyMultiCurrency; //EconomyMultiCurrency unboxing to Economy
             }
-        // This feature will allow us to inject economyMultiCurrency into existing systems that consume Economy.class
+        // This feature will allow us to inject EconomyMultiCurrency into existing systems that consume Economy.class
     }
 
     private boolean setupChat() {
